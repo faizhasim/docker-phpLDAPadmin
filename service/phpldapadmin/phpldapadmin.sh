@@ -20,7 +20,7 @@ getBaseDn () {
       baseDn=$dc
       init=0
     else
-      baseDn="$baseDn,$dc" 
+      baseDn="$baseDn,$dc"
     fi
   done
 }
@@ -28,7 +28,7 @@ getBaseDn () {
 # a ldap container is linked to this phpLDAPadmin container
 if [ -n "${LDAP_NAME}" ]; then
   LDAP_HOST=${LDAP_PORT_389_TCP_ADDR}
-  
+
   # Get base dn from ldap domain
   getBaseDn ${LDAP_ENV_LDAP_DOMAIN}
 
@@ -72,7 +72,7 @@ if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   sed -i "s:// \$config->custom->appearance\['hide_template_warning'\] = false;:\$config->custom->appearance\[\'hide_template_warning\'\] = true;:g" /etc/phpldapadmin/config.php
 
   # nginx config (tools from osixia/baseimage)
-  /sbin/nginx-add-vhost localhost /usr/share/phpldapadmin/htdocs --php --ssl --ssl-crt=/etc/nginx/ssl/$PHPLDAPADMIN_SSL_CRT_FILENAME --ssl-key=/etc/nginx/ssl/$PHPLDAPADMIN_SSL_KEY_FILENAME
+  /sbin/nginx-add-vhost localhost /usr/share/phpldapadmin/htdocs --php
   /sbin/nginx-remove-vhost default
 
   touch /etc/phpldapadmin/docker_bootstrapped
