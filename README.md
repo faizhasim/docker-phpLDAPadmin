@@ -15,6 +15,7 @@ Run docker container with your custom environment variables :
 
 phpLDAPadmin should be running on https://localhost
 
+If you do not want SSL, set env NOSSL=1. Otherwise, all http traffic will be redirected to https. This is added for installations where the container is running in mesos, or some other environment where ssl is offloaded at the load-balancer.
 
 ### Whant more ? Openldap & phpLDAPadmin in 2''
 
@@ -25,9 +26,9 @@ to be completed :)
 
 ## Examples
 
-### Customise self signed certificat
+### Customise self signed certificate
 
-### Use your own ssl certificat
+### Use your own ssl certificate
 
 ### Get phpLDAPadmin using TLS
 
@@ -36,7 +37,7 @@ to be completed :)
 
 ### Build image
 
-Clone the repository 
+Clone the repository
 
     git clone https://github.com/osixia/docker-phpLDAPadmin
     cd docker-phpLDAPadmin
