@@ -1,11 +1,14 @@
 FROM osixia/baseimage:0.8.1
-MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.net>
 
 # Default configuration: can be overridden at the docker command line
 ENV LDAP_HOST 127.0.0.1
 ENV LDAP_BASE_DN dc=example,dc=com
 ENV LDAP_LOGIN_DN cn=admin,dc=example,dc=com
 ENV LDAP_SERVER_NAME docker.io phpLDAPadmin
+
+# disable ssl and run on port 80. Primarily for use in mesos, or other backends where ssl is handled at the web layer.
+# Pass NOSSL=1 to disable.
+ENV NOSSL 0
 
 # phpLDAPadmin SSL certificat and private key filename
 ENV PHPLDAPADMIN_SSL_CRT_FILENAME phpldapadmin.crt
@@ -15,13 +18,13 @@ ENV PHPLDAPADMIN_SSL_KEY_FILENAME phpldapadmin.key
 ENV LDAP_TLS_CA_NAME ca.crt
 
 # Disable SSH
-# RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
+RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # Enable php and nginx
 RUN /sbin/enable-service php5-fpm nginx
 
 # Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
+ENTRYPOINT ["/sbin/my_init"]
 
 # Resynchronize the package index files from their sources
 RUN apt-get -y update
@@ -32,7 +35,7 @@ RUN LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-reco
 # Expose http and https default ports
 EXPOSE 80 443
 
-# Create LDAP CA certificat directory
+# Create LDAP CA certificate directory
 RUN mkdir /etc/ldap/ssl
 
 # phpLDAPadmin config
