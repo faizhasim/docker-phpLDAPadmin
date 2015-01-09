@@ -72,7 +72,11 @@ if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   sed -i "s:// \$config->custom->appearance\['hide_template_warning'\] = false;:\$config->custom->appearance\[\'hide_template_warning\'\] = true;:g" /etc/phpldapadmin/config.php
 
   # nginx config (tools from osixia/baseimage)
-  /sbin/nginx-add-vhost localhost /usr/share/phpldapadmin/htdocs --php
+  if [ "${NOSSL}" = "1" ]; then
+    /sbin/nginx-add-vhost localhost /usr/share/phpldapadmin/htdocs --php
+  else
+    /sbin/nginx-add-vhost localhost /usr/share/phpldapadmin/htdocs --php --ssl --ssl-crt=/etc/nginx/ssl/$PHPLDAPADMIN_SSL_CRT_FILENAME --ssl-key=/etc/nginx/ssl/$PHPLDAPADMIN_SSL_KEY_FILENAME
+  fi
   /sbin/nginx-remove-vhost default
 
   touch /etc/phpldapadmin/docker_bootstrapped
