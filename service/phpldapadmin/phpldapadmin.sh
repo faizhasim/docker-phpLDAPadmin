@@ -64,6 +64,8 @@ if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   sed -i "s/'cn=admin,dc=example,dc=com'/'${LDAP_LOGIN_DN}'/g" /etc/phpldapadmin/config.php
   sed -i "s/'My LDAP Server'/'${LDAP_SERVER_NAME}'/g" /etc/phpldapadmin/config.php
 
+  sed -i "s/setValue('server','base',array(.*))/setValue('server','base',array('${LDAP_BASE_DN}'))/g" /etc/phpldapadmin/config.php
+
   # Fix the bug with password_hash
   # See http://stackoverflow.com/questions/20673186/getting-error-for-setting-password-feild-when-creating-generic-user-account-phpl
   sed -i "s/'password_hash'/'password_hash_custom'/" /usr/share/phpldapadmin/lib/TemplateRender.php
